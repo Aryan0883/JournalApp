@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisService {
 
+    //FREQUENTLY USED METHOADS ARE WRITTEN HERE
+
+
     @Autowired
     private RedisTemplate redisTemplate;
 
