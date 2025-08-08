@@ -1,14 +1,18 @@
-spring:
-  profiles:
-    active: dev
+weather:
+  api:
+    key: ${WEATHER_API_KEY}
+  main:
+    allow-circular-references: true
+  server:
+    port: ${SERVER_PORT}
+    servlet:
+      context-path: /journal
 
   redis:
     host: localhost
     port: 6379
-
-
-weather:
-  api:
-    key: fb8cadb2bfd3b065fc33df080ead163d
-
-
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: journaldb
+      auto-index-creation: true
