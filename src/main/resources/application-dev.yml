@@ -1,12 +1,12 @@
 spring:
-  profiles:
-    active: dev
+  data:
+    mongodb:
+      uri: mongodb+srv://mydatabase:Aryan%4012345@cluster0.tpg34.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: journaldb
+      auto-index-creation: true
 
-  redis:
-    host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:6379}
+server:
+  port: 8080
+  servlet:
+    context-path: /journal
 
-
-weather:
-  api:
-    key: ${WEATHER_API_KEY}
