@@ -20,6 +20,9 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI myCustomConfig(){
         return new OpenAPI()
+                .servers(List.of(
+                        new Server().url("https://journalapp-7.onrender.com/journal")
+                ))
                 .info(
                         new Info().title("Journal App APIs")
                                 .description("By Aryan Naresh")
