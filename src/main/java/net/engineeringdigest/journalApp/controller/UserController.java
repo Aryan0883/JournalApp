@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import net.engineeringdigest.journalApp.api.response.WeatherResponse;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.repository.UserRepository;
@@ -14,41 +15,43 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User APIs", description = "Read, Update & Delete User")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private WeatherService weatherService;
 
-    @PostMapping
-    public void createUser(@RequestBody User user) {
-       // if (userService.findByUserName(user.getUserName()) != null) {
-       //     return new ResponseEntity<>("Username already exists", HttpStatus.BAD_REQUEST);
-     //   }
-        userService.saveNewUser(user);
-     //   return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
-    }
-
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody User user){
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        User userInDb = userService.findByUserName(userName);  //updates password and userName
-            userInDb.setUserName(user.getUserName());
-            userInDb.setPassword(user.getPassword());
-            userService.saveNewUser(userInDb);
-        return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        User userInDb = userService.findByUserName(userName);
+        userInDb.setUserName(user.getUserName());
+        userInDb.setPassword(user.getPassword());
+        userService.saveNewUser(userInDb);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUserById() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteByUserName(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping
     public ResponseEntity<?> greeting() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         WeatherResponse weatherResponse = weatherService.getWeather("Mumbai");
         String greeting = "";
         if (weatherResponse != null) {
-            greeting = ", Weather feels like " + weatherResponse.getCurrent(). getFeelslike();
+            greeting = ", Weather feels like " + weatherResponse.getCurrent().getFeelslike();
         }
         return new ResponseEntity<>("Hi " + authentication.getName() + greeting, HttpStatus.OK);
     }
